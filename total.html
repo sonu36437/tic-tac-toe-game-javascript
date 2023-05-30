@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <!-- <link rel="stylesheet" href="style.css" /> -->
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap");
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .boxes {
+      height: 80px;
+      width: 80px;
+      border: 2px solid rgb(21, 20, 20);
+      padding: 10px;
+      font-size: 40px;
+      font-weight: bolder;
+      border-radius: 2px;
+    }
+
+    .contboxes {
+      display: grid;
+      font-family: "Permanent Marker", cursive;
+
+      grid-template-columns: 80px 80px 80px;
+    }
+
+    body {
+      height: 100vh;
+      display: grid;
+      justify-content: center;
+      align-items: center;
+      background-color: rgb(195, 253, 226);
+    }
+
+    .boxes:nth-child(1),
+    .boxes:nth-child(7),
+    .boxes:nth-child(4) {
+      /* border-top: none; */
+      border-left: none;
+    }
+
+    .boxes:nth-child(1),
+    .boxes:nth-child(2),
+    .boxes:nth-child(3) {
+      border-top: none;
+    }
+
+    .boxes:nth-child(3),
+    .boxes:nth-child(6),
+    .boxes:nth-child(9) {
+      border-right: none;
+    }
+
+    .boxes:nth-child(7),
+    .boxes:nth-child(8),
+    .boxes:nth-child(9) {
+      border-bottom: none;
+    }
+
+    .player {
+      font-size: 56px;
+      text-align: center;
+      font-weight: bolder;
+      color: rgb(34, 73, 78);
+    }
+
+    .resetbtn {
+      text-align: center;
+    }
+
+    .btn {
+      height: 70px;
+      width: 200px;
+      border: none;
+      border-radius: 40px;
+      background-color: black;
+      color: rgb(194, 253, 201);
+      font-size: 40px;
+      font-weight: bold;
+    }
+
+
+    @media (max-width: 768px) {
+      .player {
+        position: absolute;
+        top: 0px;
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="player">Tic Tac Toe</div>
+
+  <div class="allfields">
+    <div class="contboxes">
+      <div class="boxes"></div>
+      <div class="boxes"></div>
+      <div class="boxes"></div>
+      <div class="boxes"></div>
+      <div class="boxes"></div>
+      <div class="boxes"></div>
+      <div class="boxes"></div>
+      <div class="boxes"></div>
+      <div class="boxes"></div>
+    </div>
+  </div>
+  <div class="resetbtn" class="formob">
+    <button class="btn">Restart</button>
+  </div>
+  <script>
+    let allindex = Array.from(document.querySelectorAll(".boxes"));
+    clicked = false;
+    alreadyWon = false;
+    terminate = false;
+
+    let spaces = Array(allindex.length).fill(null);
+
+    function putXandY() {
+      if (alreadyWon == false) {
+        for (let i = 0; i < allindex.length; i++) {
+          allindex[i].addEventListener("click", function() {
+            if (terminate != false) return;
+            if (clicked == false && spaces[i] == null) {
+              allindex[i].innerText = "❌";
+              spaces[i] = "❌";
+              clicked = true;
+
+              playerWins();
+
+              if (alreadyWon == true) {
+                terminate = true;
+                return;
+              }
+            } else if (spaces[i] == null) {
+              allindex[i].innerText = "⭕";
+              spaces[i] = "⭕";
+              clicked = false;
+
+              playerWins();
+              if (alreadyWon == true) {
+                terminate = true;
+                return;
+              }
+            }
+          });
+        }
+      }
+    }
+
+    putXandY();
+
+
+    winningCondition = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+
+    function playerWins() {
+      for (element of winningCondition) {
+        let [a, b, c] = element;
+        if (spaces[a] && spaces[a] == spaces[b] && spaces[a] == spaces[c]) {
+
+          document.querySelector(".player").innerText = `${spaces[a]} Wins`;
+          alreadyWon = true;
+          allindex[a].style.background = '#317773';
+          allindex[b].style.background = '#317773';
+          allindex[c].style.background = '#317773';
+        }
+      }
+
+    }
+    let reset = document.querySelector(".resetbtn");
+    let heading = document.querySelector(".player");
+
+    reset = document.querySelector(".resetbtn");
+    reset.addEventListener("click", function() {
+      for (i = 0; i < allindex.length; i++) {
+        allindex[i].innerText = "";
+        spaces[i] = null;
+        allindex[i].style = 'none';
+      }
+      terminate = false;
+      clicked = false;
+      alreadyWon = false;
+      document.querySelector(".player").innerText = "Tic Tac Toe";
+    });
+  </script>
+</body>
+
+</html>
